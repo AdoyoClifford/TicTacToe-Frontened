@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adoyo.tictactoe.data.GameState
@@ -17,12 +19,26 @@ import com.adoyo.tictactoe.data.GameState
 fun TicTacToeField(
     state: GameState,
     modifier: Modifier = Modifier,
-    colorX: Color = Color.Black,
-    colorY: Color = Color.Green,
+    playerXColor: Color = Color.Green,
+    playerYColor: Color = Color.Blue,
     onTapField: (x: Int, y: Int) -> Unit
 ) {
     Canvas(modifier = modifier) {
         drawField()
+        drawX(
+            color = playerXColor,
+            center = Offset(
+                x = size.width * (1/6f),
+                y = size.height * (1/6f)
+            )
+        )
+        drawO(
+            color = playerYColor,
+            center = Offset(
+                x = size.width * (3/6f),
+                y = size.height * (3/6f)
+            )
+        )
     }
 
 }
@@ -86,6 +102,57 @@ private fun DrawScope.drawField() {
         ),
         strokeWidth = 3.dp.toPx(),
         cap = StrokeCap.Round
+    )
+}
+
+private fun DrawScope.drawX(
+    color: Color,
+    center: Offset,
+    size: Size = Size(50.dp.toPx(),50.dp.toPx())
+) {
+    drawLine(
+        color = color,
+        start = Offset(
+            x = center.x - size.width / 2f,
+            y = center.y - size.height / 2f
+        ),
+        end = Offset(
+            x = center.x + size.width / 2f,
+            y = center.y + size.height / 2f
+        ),
+        strokeWidth = 3.dp.toPx(),
+        cap = StrokeCap.Round
+    )
+
+    drawLine(
+        color = color,
+        start = Offset(
+            x = center.x - size.width / 2f,
+            y = center.y + size.height / 2f
+        ),
+        end = Offset(
+            x = center.x + size.width / 2f,
+            y = center.y - size.height / 2f
+        ),
+        strokeWidth = 3.dp.toPx(),
+        cap = StrokeCap.Round
+    )
+
+
+}
+
+private fun DrawScope.drawO(
+    color: Color,
+    center: Offset,
+    size: Size = Size(50.dp.toPx(),50.dp.toPx())
+) {
+    drawCircle(
+        color = color,
+        center = center,
+        radius = size.width / 2,
+        style = Stroke(
+            width = 3.dp.toPx()
+        )
     )
 }
 
