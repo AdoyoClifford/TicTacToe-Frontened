@@ -1,5 +1,12 @@
 package com.adoyo.tictactoe.presentation
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adoyo.tictactoe.data.GameState
@@ -18,12 +25,12 @@ import javax.inject.Inject
 
 class TicTacToeViewModel @Inject constructor(
     private val client: RealTimeMessaging
-): ViewModel() {
+) : ViewModel() {
     val state = client
         .gameStateStream()
         .onStart { _isConnecting.value = true }
         .onEach { _isConnecting.value = false }
-        .catch { t-> _showConnectionError.value = t is ConnectException }
+        .catch { t -> _showConnectionError.value = t is ConnectException }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), GameState())
 
     private val _isConnecting = MutableStateFlow(false)
@@ -38,7 +45,7 @@ class TicTacToeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            client.sendAction(MakeTurn(x,y))
+            client.sendAction(MakeTurn(x, y))
         }
     }
 
@@ -49,3 +56,4 @@ class TicTacToeViewModel @Inject constructor(
         }
     }
 }
+
