@@ -25,20 +25,26 @@ fun TicTacToeField(
 ) {
     Canvas(modifier = modifier) {
         drawField()
-        drawX(
-            color = playerXColor,
-            center = Offset(
-                x = size.width * (1/6f),
-                y = size.height * (1/6f)
-            )
-        )
-        drawO(
-            color = playerYColor,
-            center = Offset(
-                x = size.width * (3/6f),
-                y = size.height * (3/6f)
-            )
-        )
+        state.field.forEachIndexed{y,_ ->
+            state.field[y].forEachIndexed{x, player ->
+                val offset = Offset(
+                    x = x * size.width * (1/3f) + size.width / 6f,
+                    y = y * size.height * (1/3f) + size.width / 6f
+                )
+
+                if (player == 'X') {
+                    drawX(
+                        color = playerXColor,
+                        center = offset
+                    )
+                } else if (player == 'O'){
+                    drawO(
+                        color = playerYColor,
+                        center = offset
+                    )
+                }
+            }
+        }
     }
 
 }
